@@ -32,7 +32,7 @@ public class JwtService {
     @Value("${jwt.refresh.expiry-time}")
     private Integer refreshExpiryTime;
 
-    private Claims extractClaims(String token) {
+    public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                    .setSigningKey(getPublicKeyDecryption())
                    .build()
