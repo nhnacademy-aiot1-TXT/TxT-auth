@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccessTokenResponse {
     @JsonProperty("refresh_token")
-    private String refreshToken;
+    private String accessToken;
     @JsonProperty("token_type")
     private String tokenType;
     @JsonProperty("expire_in")
