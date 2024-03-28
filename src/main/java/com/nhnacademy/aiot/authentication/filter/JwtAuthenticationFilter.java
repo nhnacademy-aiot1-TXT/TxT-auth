@@ -6,6 +6,7 @@ import com.nhnacademy.aiot.authentication.dto.AccessTokenResponse;
 import com.nhnacademy.aiot.authentication.dto.RefreshTokenResponse;
 import com.nhnacademy.aiot.authentication.security.CustomUserDetails;
 import com.nhnacademy.aiot.authentication.service.JwtService;
+import com.nhnacademy.aiot.authentication.service.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -19,23 +20,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 @Component
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtService jwtService;
     private final ObjectMapper objectMapper;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisService redisService;
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(JwtService jwtService, ObjectMapper objectMapper, RedisTemplate<String, Object> redisTemplate, AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(JwtService jwtService, ObjectMapper objectMapper, RedisService redisService, AuthenticationManager authenticationManager) {
         super(authenticationManager);
         this.jwtService = jwtService;
         this.objectMapper = objectMapper;
-        this.redisTemplate = redisTemplate;
+        this.redisService = redisService;
         this.authenticationManager = authenticationManager;
         setFilterProcessesUrl("/api/auth/login");
     }
@@ -62,12 +61,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = jwtService.generateAccessToken(userId);
         String refreshToken = jwtService.generateRefreshToken(userId);
 
-
         AccessTokenResponse accessTokenResponse = new AccessTokenResponse(accessToken, jwtService.getPrefix(), jwtService.getAccessExpiryTime());
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse(refreshToken, jwtService.getRefreshExpiryTime());
 
-        redisTemplate.opsForValue().set(userId, refreshToken);
-        redisTemplate.expire(userId, refreshTokenResponse.getExpiresIn(), TimeUnit.DAYS);
+        redisService.addRefreshToken(userId, refreshToken, refreshTokenResponse.getExpiresIn());
 
         Map<String, Object> tokens = new HashMap<>();
         tokens.put("accessToken", accessTokenResponse);
