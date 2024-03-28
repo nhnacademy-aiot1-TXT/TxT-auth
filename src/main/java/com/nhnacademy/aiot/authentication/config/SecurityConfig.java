@@ -33,7 +33,8 @@ public class SecurityConfig {
             .authorizeHttpRequests()
             .antMatchers("/api/auth/login").permitAll()
             .and()
-            .authenticationProvider(authenticationProvider());
+            .authenticationProvider(authenticationProvider())
+            .logout().logoutUrl("/api/auth/logout");
 
         return http.build();
     }
