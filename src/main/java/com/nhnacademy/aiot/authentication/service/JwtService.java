@@ -3,6 +3,7 @@ package com.nhnacademy.aiot.authentication.service;
 import com.nhnacademy.aiot.authentication.exception.CryptoOperationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +60,7 @@ public class JwtService {
                    .claim("userId", userId)
                    .setIssuedAt(new Date())
                    .setExpiration(expiryTime.getTime())
-                   .signWith(getPrivateKeyEncryption())
+                   .signWith(getPrivateKeyEncryption(), SignatureAlgorithm.RS256)
                    .compact();
     }
 
