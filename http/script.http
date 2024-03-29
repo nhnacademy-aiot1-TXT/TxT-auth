@@ -5,3 +5,16 @@ Content-Type: application/json
 "id" : "test2",
 "password": "test2"
 }
+
+###
+GET http://localhost:8100/api/auth/logout
+content-type: text/plain
+
+eyJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJ0ZXN0MiIsImlhdCI6MTcxMTY5ODE2NywiZXhwIjoxNzExNzg0NTY3fQ.eSpnARBU6OgTIjEZl0mMm33lwLfoLOGnUR_zgO0qc2tN9P_NS4SQHNT5TWtqPNP-Y05M4ATPxe6kDIsJD3k7UPH7MfksznkSXAknL1nRBmdBLawuFkKLJzr5x78xvfMLaDWyKlH8XRnl7lZvBOvdDaEtD-FkWgxO89qomBv1taEX0IuTFTNZlVf_d_BJIlr3QpsHyKPgMNFP7_mlbu_g5Z7YYZ5ETbBvs6G-aUU5njUe9TeyI1whXuGxbWQteu_B8-ee88g10bdZ44cYVqWIKssKE-brHLIbLMGuvzrCjV0CnOF1LqlzzhB7rYXhqez016-ocN5ZvaPurSUM4qYUtA
+
+###
+GET http://localhost:8100/api/auth/reissue
+X-REFRESH-TOKEN: eyJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiJ0ZXN0MiIsImlhdCI6MTcxMTY5NTI0NSwiZXhwIjoxNzExNzgxNjQ1fQ.RkIFGlSV14mekNkEJFqn2hUtRRyWNeoGbxkJHD6B7hj483qY6-N6tVLhOp1oglysksmSke9LQPBFdh3AtTJNIVU_GXiTGRnfNFA4X8ewD7_nck3Bm62-QSJhqO7SGzoSq2LUR8hyH9ePoYwzXD7rwiLG7jzmBjY55wXQtwjac5SjrisjsFf-QEgTzZ3rPUvfgQn2wQoHYi5pO8S8JiUf22Xh9PrCIhtYg1iy4NKgjU3JwZRawnzCdxzlj6ulOE_qvCjloauwn_1yuH7Ei__-i-1SzugpDl_yAzZV-IMItTcyw46m6PxqCWIVcVYOm60-eRBChNkaT3xJ79Aat4bO0Q
+
+###
+GET http://localhost:8100/username

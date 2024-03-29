@@ -16,7 +16,7 @@ public class RedisService {
 
     private void removeOldestToken(String userId) {
         Set<String> keys = getKeys(userId);
-        if (keys != null && keys.size() > 3) {
+        if (keys != null && keys.size() > 2) {
             String minTimestampKey = null;
             long minTimestamp = Long.MAX_VALUE;
             for (String key : keys) {
@@ -62,8 +62,17 @@ public class RedisService {
         return result;
     }
 
-    private  Set<String> getKeys(String userId) {
+    private Set<String> getKeys(String userId) {
         return redisTemplate.keys("userId:" + userId + ":*");
+    }
+
+    public void deleteUserToken(String userId, String refreshToken) {
+        Set<String> keys = getKeys(userId);
+        for (String key : keys) {
+            if (refreshToken.equals(redisTemplate.opsForValue().get(key))) {
+                redisTemplate.delete(key);
+            }
+        }
     }
 
 }
