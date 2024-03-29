@@ -7,7 +7,6 @@ import com.nhnacademy.aiot.authentication.dto.RefreshTokenResponse;
 import com.nhnacademy.aiot.authentication.security.CustomUserDetails;
 import com.nhnacademy.aiot.authentication.service.JwtService;
 import com.nhnacademy.aiot.authentication.service.RedisService;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
