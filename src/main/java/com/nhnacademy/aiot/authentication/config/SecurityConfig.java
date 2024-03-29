@@ -1,8 +1,11 @@
 package com.nhnacademy.aiot.authentication.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.aiot.authentication.adapter.UserAdapter;
 import com.nhnacademy.aiot.authentication.filter.JwtAuthenticationFilter;
 import com.nhnacademy.aiot.authentication.security.CustomUserDetailsService;
+import com.nhnacademy.aiot.authentication.service.JwtService;
+import com.nhnacademy.aiot.authentication.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,16 +23,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserAdapter userAdapter;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtService jwtService;
+    private final ObjectMapper objectMapper;
+    private final RedisService redisService;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+
 
     @Bean
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .formLogin().disable()
             .httpBasic().disable()
-            .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAt(new JwtAuthenticationFilter(jwtService, objectMapper, redisService, authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests()
             .antMatchers("/api/auth/login").permitAll()
             .and()
