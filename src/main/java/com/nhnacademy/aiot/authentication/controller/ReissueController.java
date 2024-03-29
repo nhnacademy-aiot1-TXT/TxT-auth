@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * refresh token 재발급과 관련된 컨트롤러입니다.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -23,8 +23,8 @@ public class ReissueController {
     private final RedisService redisService;
     private final JwtService jwtService;
 
-    @PostMapping
-    public AccessTokenResponse reissue(@RequestHeader("X-REFRESH_TOKEN") String refreshToken) {
+    @GetMapping
+    public AccessTokenResponse reissue(@RequestHeader("X-REFRESH-TOKEN") String refreshToken) {
         String userId;
         try {
             userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
