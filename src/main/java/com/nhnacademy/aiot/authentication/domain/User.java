@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class User {
     private String id;
     private String password;
-    private Role role;
+    private String roleName;
 }
