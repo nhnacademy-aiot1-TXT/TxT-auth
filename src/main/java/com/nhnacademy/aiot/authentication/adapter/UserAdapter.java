@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(value="user-management", path="/api/user/myPage")
 public interface UserAdapter {
     @GetMapping
-    User getUser(@RequestHeader("X-USER_ID") String id);
+    User getUser(@RequestHeader("X-USER-ID") String id);
 }
