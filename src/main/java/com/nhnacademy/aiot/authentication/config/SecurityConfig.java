@@ -14,9 +14,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.StreamUtils;
+
+import javax.servlet.ServletInputStream;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,12 +33,11 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
 
-
     @Bean
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             .and()
             .formLogin().disable()
             .httpBasic().disable()
@@ -43,7 +46,16 @@ public class SecurityConfig {
             .antMatchers("/api/auth/login").permitAll()
             .and()
             .authenticationProvider(authenticationProvider())
-            .logout().logoutUrl("/api/auth/logout");
+            .logout().logoutUrl("/api/auth/logout")
+            .logoutSuccessHandler(((request, response, authentication) -> {
+                String userId = ((UserDetails) authentication.getPrincipal()).getUsername();
+
+                ServletInputStream inputStream = request.getInputStream();
+                byte[] rawData = StreamUtils.copyToByteArray(inputStream);
+                String refreshToken = new String(rawData);
+
+                redisService.deleteUserToken(userId, refreshToken);
+            }));
 
         return http.build();
     }
