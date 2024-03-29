@@ -1,0 +1,7 @@
+GET http://localhost:8100/api/auth/login
+Content-Type: application/json
+
+{
+"id" : "test2",
+"password": "test2"
+}
