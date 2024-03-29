@@ -37,6 +37,10 @@ public class ReissueController {
             throw new InvalidTokenException();
         }
 
+        if (!redisService.isExist(userId, refreshToken)) {
+            throw new InvalidTokenException();
+        }
+
         return new AccessTokenResponse(jwtService.generateAccessToken(userId), jwtService.getPrefix(), jwtService.getAccessExpiryTime());
     }
 }
