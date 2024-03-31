@@ -25,17 +25,7 @@ public class ReissueController {
 
     @GetMapping
     public AccessTokenResponse reissue(@RequestHeader("X-REFRESH-TOKEN") String refreshToken) {
-        String userId;
-        try {
-            userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
-        } catch (SignatureException e) {
-            userId = ((UserDetails) SecurityContextHolder.getContext()
-                                                         .getAuthentication()
-                                                         .getPrincipal()).getUsername();
-            redisService.removeUserTokens(userId);
-            log.error(userId + ": refresh token 변조가 의심되어 해당 사용자의 refresh token을 모두 삭제하였습니다.");
-            throw new InvalidTokenException();
-        }
+        String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
 
         if (!redisService.isExist(userId, refreshToken)) {
             throw new InvalidTokenException();

@@ -48,11 +48,11 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .logout().logoutUrl("/api/auth/logout")
             .logoutSuccessHandler(((request, response, authentication) -> {
-                String userId = ((UserDetails) authentication.getPrincipal()).getUsername();
-
                 ServletInputStream inputStream = request.getInputStream();
                 byte[] rawData = StreamUtils.copyToByteArray(inputStream);
                 String refreshToken = new String(rawData);
+
+                String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
 
                 redisService.deleteUserToken(userId, refreshToken);
             }));
