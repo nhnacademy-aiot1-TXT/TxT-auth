@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * refresh token 재발급과 관련된 컨트롤러입니다.
+ * access token 재발급과 관련된 컨트롤러입니다.
  */
 @Slf4j
 @RestController
@@ -20,6 +20,12 @@ public class ReissueController {
     private final RedisService redisService;
     private final JwtService jwtService;
 
+    /**
+     * refresh token을 검증하고, 유효한 토큰이면 access token을 재발급합니다. redis에 존재하지 않는 refresh token이면 InvalidTokenException 예외를 던집니다.
+     *
+     * @param refreshToken access token 재발급을 위해 필요한 refresh token
+     * @return {@link AccessTokenResponse} dto를 반환합니다.
+     */
     @GetMapping
     public AccessTokenResponse reissue(@RequestHeader("X-REFRESH-TOKEN") String refreshToken) {
         String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
