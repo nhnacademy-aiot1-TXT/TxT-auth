@@ -4,11 +4,8 @@ import com.nhnacademy.aiot.authentication.dto.AccessTokenResponse;
 import com.nhnacademy.aiot.authentication.exception.InvalidTokenException;
 import com.nhnacademy.aiot.authentication.service.JwtService;
 import com.nhnacademy.aiot.authentication.service.RedisService;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,11 +23,12 @@ public class ReissueController {
     @GetMapping
     public AccessTokenResponse reissue(@RequestHeader("X-REFRESH-TOKEN") String refreshToken) {
         String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
+        String authority = jwtService.extractClaims(refreshToken).get("authority", String.class);
 
         if (!redisService.isExist(userId, refreshToken)) {
             throw new InvalidTokenException();
         }
 
-        return new AccessTokenResponse(jwtService.generateAccessToken(userId), jwtService.getPrefix(), jwtService.getAccessExpiryTime());
+        return new AccessTokenResponse(jwtService.generateAccessToken(userId, authority), jwtService.getPrefix(), jwtService.getAccessExpiryTime());
     }
 }

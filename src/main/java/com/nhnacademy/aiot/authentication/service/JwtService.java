@@ -19,6 +19,8 @@ import java.util.*;
 @Service
 public class JwtService {
 
+    public static final String PREFIX = "Bearer";
+
     @Value("${jwt.private-key}")
     private String privateKey;
 
@@ -41,23 +43,24 @@ public class JwtService {
                    .getBody();
     }
 
-    public String generateAccessToken(String userId) {
+    public String generateAccessToken(String userId, String authority) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, accessExpiryTime);
 
-        return generateToken(userId, calendar);
+        return generateToken(userId, authority, calendar);
     }
 
-    public String generateRefreshToken(String userId) {
+    public String generateRefreshToken(String userId, String authority) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, refreshExpiryTime);
 
-        return generateToken(userId, calendar);
+        return generateToken(userId, authority, calendar);
     }
 
-    private String generateToken(String userId, Calendar expiryTime) {
+    private String generateToken(String userId, String authority, Calendar expiryTime) {
         return Jwts.builder()
                    .claim("userId", userId)
+                   .claim("authority", authority)
                    .setIssuedAt(new Date())
                    .setExpiration(expiryTime.getTime())
                    .signWith(getPrivateKeyEncryption(), SignatureAlgorithm.RS256)
@@ -87,6 +90,6 @@ public class JwtService {
     }
 
     public String getPrefix() {
-        return "Bearer";
+        return PREFIX;
     }
 }

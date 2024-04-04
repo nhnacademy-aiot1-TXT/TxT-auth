@@ -11,7 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
@@ -55,11 +55,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
-
         String userId = customUserDetails.getUsername();
+        String authority = "ROLE_USER";
+        GrantedAuthority grantedAuthority = customUserDetails.getAuthorities().stream().findFirst().orElse(null);
+        if (grantedAuthority != null) {
+            authority = grantedAuthority.getAuthority();
+        }
 
-        String accessToken = jwtService.generateAccessToken(userId);
-        String refreshToken = jwtService.generateRefreshToken(userId);
+        String accessToken = jwtService.generateAccessToken(userId, authority);
+        String refreshToken = jwtService.generateRefreshToken(userId, authority);
 
         AccessTokenResponse accessTokenResponse = new AccessTokenResponse(accessToken, jwtService.getPrefix(), jwtService.getAccessExpiryTime());
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse(refreshToken, jwtService.getRefreshExpiryTime());
@@ -70,8 +74,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         tokens.put("accessToken", accessTokenResponse);
         tokens.put("refreshToken", refreshTokenResponse);
         String result = objectMapper.writeValueAsString(tokens);
-
-        SecurityContextHolder.getContext().setAuthentication(authResult);
 
         PrintWriter printWriter = response.getWriter();
         response.setHeader("content-type", "application/json");
