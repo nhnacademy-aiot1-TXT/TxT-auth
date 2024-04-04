@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * custom한 UserDetails 구현체입니다.
+ */
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 

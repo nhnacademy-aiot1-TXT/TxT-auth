@@ -14,7 +14,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,6 +21,9 @@ import org.springframework.util.StreamUtils;
 
 import javax.servlet.ServletInputStream;
 
+/**
+ * Spring Security 관련 설정
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -33,6 +35,13 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
 
 
+    /**
+     * 로그인, 로그아웃 등을 설정합니다. 로그아웃 시 redis에 저장된 회원의 refresh token을 삭제합니다.
+     *
+     * @param http HttpSecurity
+     * @return SecurityFilterChain
+     * @throws Exception
+     */
     @Bean
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

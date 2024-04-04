@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * 로그인을 시도했을 때와 성공했을 때 사용되는 필터입니다.
+ */
 @Component
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -39,6 +42,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setFilterProcessesUrl("/api/auth/login");
     }
 
+    /**
+     * 로그인 요청으로 받은 아이디와 비밀 번호를 받아 UsernamePasswordAuthenticationToken을 만듭니다.
+     *
+     * @param request
+     * @param response
+     * @return {@link Authentication}를 반환합니다.
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         LoginRequest loginRequest;
@@ -52,6 +62,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
     }
 
+    /**
+     * 로그인이 성공했을 때 실행됩니다. payload에 user id와 authority가 담긴 access token과 refresh token을 발급하고, response body에 넣어 보냅니다.
+     * refresh token은 redis에 따로 저장합니다.
+     *
+     * @param request
+     * @param response
+     * @param chain
+     * @param authResult
+     * @throws IOException
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
