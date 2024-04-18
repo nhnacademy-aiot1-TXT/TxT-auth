@@ -6,10 +6,16 @@ import com.nhnacademy.aiot.authentication.service.JwtService;
 import com.nhnacademy.aiot.authentication.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * access token 재발급과 관련된 컨트롤러입니다.
+ *
+ * @author parksangwon
+ * @version 1.0.0
  */
 @Slf4j
 @RestController
