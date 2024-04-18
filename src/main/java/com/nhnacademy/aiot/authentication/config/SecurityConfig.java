@@ -23,6 +23,9 @@ import javax.servlet.ServletInputStream;
 
 /**
  * Spring Security 관련 설정
+ *
+ * @author parksangwon
+ * @version 1.0.0
  */
 @Configuration
 @RequiredArgsConstructor
@@ -46,25 +49,25 @@ public class SecurityConfig {
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .and()
-            .formLogin().disable()
-            .httpBasic().disable()
-            .addFilterAt(new JwtAuthenticationFilter(jwtService, objectMapper, redisService, authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class)
-            .authorizeHttpRequests()
-            .antMatchers("/api/auth/login").permitAll()
-            .and()
-            .authenticationProvider(authenticationProvider())
-            .logout().logoutUrl("/api/auth/logout")
-            .logoutSuccessHandler(((request, response, authentication) -> {
-                ServletInputStream inputStream = request.getInputStream();
-                byte[] rawData = StreamUtils.copyToByteArray(inputStream);
-                String refreshToken = new String(rawData);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .addFilterAt(new JwtAuthenticationFilter(jwtService, objectMapper, redisService, authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests()
+                .antMatchers("/api/auth/login").permitAll()
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .logout().logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler(((request, response, authentication) -> {
+                    ServletInputStream inputStream = request.getInputStream();
+                    byte[] rawData = StreamUtils.copyToByteArray(inputStream);
+                    String refreshToken = new String(rawData);
 
-                String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
+                    String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
 
-                redisService.deleteUserToken(userId, refreshToken);
-            }));
+                    redisService.deleteUserToken(userId, refreshToken);
+                }));
 
         return http.build();
     }

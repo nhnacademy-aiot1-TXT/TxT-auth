@@ -1,8 +1,8 @@
 package com.nhnacademy.aiot.authentication.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.aiot.authentication.dto.LoginRequest;
 import com.nhnacademy.aiot.authentication.dto.AccessTokenResponse;
+import com.nhnacademy.aiot.authentication.dto.LoginRequest;
 import com.nhnacademy.aiot.authentication.dto.RefreshTokenResponse;
 import com.nhnacademy.aiot.authentication.security.CustomUserDetails;
 import com.nhnacademy.aiot.authentication.service.JwtService;
@@ -20,10 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 로그인을 시도했을 때와 성공했을 때 사용되는 필터입니다.
+ *
+ * @author jongsikk
+ * @version 1.0.0
  */
 @Component
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -33,6 +37,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final RedisService redisService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * JwtAuthenticationFilter 생성자 메서드
+     *
+     * @param jwtService
+     * @param objectMapper
+     * @param redisService
+     * @param authenticationManager
+     */
     public JwtAuthenticationFilter(JwtService jwtService, ObjectMapper objectMapper, RedisService redisService, AuthenticationManager authenticationManager) {
         super(authenticationManager);
         this.jwtService = jwtService;

@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * token이 저장된 redis와 관련된 서비스입니다.
+ *
+ * @author jongsikk
+ * @version 1.0.0
  */
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class RedisService {
      */
     private void removeOldestToken(String userId) {
         Set<String> keys = getKeys(userId);
-        if (keys!= null && keys.size() > 2) {
+        if (keys != null && keys.size() > 2) {
             String minTimestampKey = null;
             long minTimestamp = Long.MAX_VALUE;
             for (String key : keys) {
@@ -46,9 +49,9 @@ public class RedisService {
      * redis에 refresh token을 저장합니다.
      * key는 'userId:{userId 값}:{token을 생성한 시간}' 형태이며, value에 token 값이 들어갑니다.
      *
-     * @param userId refresh token을 발급 받은 user id
+     * @param userId       refresh token을 발급 받은 user id
      * @param refreshToken 저장할 refresh token
-     * @param expiryTime reresh token의 만료 시간
+     * @param expiryTime   reresh token의 만료 시간
      */
     public void addRefreshToken(String userId, String refreshToken, int expiryTime) {
         removeOldestToken(userId);
@@ -61,7 +64,7 @@ public class RedisService {
     /**
      * redis에 특정 user의 refresh token이 저장되어있는지 확인합니다.
      *
-     * @param userId 검색할 user id
+     * @param userId       검색할 user id
      * @param refreshToken 검색할 refresh token
      * @return token 존재 여부를 반환합니다.
      */
@@ -89,7 +92,7 @@ public class RedisService {
     /**
      * 특정 user의 refresh token을 redis에서 삭제합니다.
      *
-     * @param userId 검색할 user id
+     * @param userId       검색할 user id
      * @param refreshToken 지우고 싶은 refresh token
      */
     public void deleteUserToken(String userId, String refreshToken) {

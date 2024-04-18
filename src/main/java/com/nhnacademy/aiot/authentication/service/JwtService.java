@@ -9,19 +9,30 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * JWT와 관련된 서비스입니다.
+ *
+ * @author jongsikk
+ * @version 1.0.0
  */
 @Slf4j
 @Service
 public class JwtService {
 
+    /**
+     * The constant PREFIX.
+     */
     public static final String PREFIX = "Bearer";
 
     @Value("${jwt.private-key}")
@@ -46,10 +57,10 @@ public class JwtService {
      */
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                   .setSigningKey(getPublicKeyDecryption())
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody();
+                .setSigningKey(getPublicKeyDecryption())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
@@ -88,16 +99,16 @@ public class JwtService {
      * @param userId     payload에 넣을 userId
      * @param authority  payload에 넣을 authority
      * @param expiryTime token의 만료 시간
-     * @return  {@link String} 타입의 token을 반환합니다.
+     * @return {@link String} 타입의 token을 반환합니다.
      */
     private String generateToken(String userId, String authority, Calendar expiryTime) {
         return Jwts.builder()
-                   .claim("userId", userId)
-                   .claim("authority", authority)
-                   .setIssuedAt(new Date())
-                   .setExpiration(expiryTime.getTime())
-                   .signWith(getPrivateKeyEncryption(), SignatureAlgorithm.RS256)
-                   .compact();
+                .claim("userId", userId)
+                .claim("authority", authority)
+                .setIssuedAt(new Date())
+                .setExpiration(expiryTime.getTime())
+                .signWith(getPrivateKeyEncryption(), SignatureAlgorithm.RS256)
+                .compact();
     }
 
     /**
@@ -141,6 +152,8 @@ public class JwtService {
     }
 
     /**
+     * Gets prefix.
+     *
      * @return JWT의 prefix를 반환합니다.
      */
     public String getPrefix() {

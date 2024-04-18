@@ -11,12 +11,20 @@ import java.util.Collection;
 
 /**
  * custom한 UserDetails 구현체입니다.
+ *
+ * @author jongsikk
+ * @version 1.0.0
  */
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private User user;
 
+    /**
+     * Authorities 반환 메서드
+     *
+     * @return Authority 리스트
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();

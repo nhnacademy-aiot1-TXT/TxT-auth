@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * User 도메인입니다.
+ *
+ * @author parksangwon
+ * @version 1.0.0
  */
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

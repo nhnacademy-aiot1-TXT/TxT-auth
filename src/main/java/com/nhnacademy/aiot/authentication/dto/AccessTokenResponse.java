@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * 응답으로 access token을 보낼 때 사용하는 dto입니다.
+ *
+ * @author parksangwon
+ * @version 1.0.0
  */
 @Getter
 @AllArgsConstructor

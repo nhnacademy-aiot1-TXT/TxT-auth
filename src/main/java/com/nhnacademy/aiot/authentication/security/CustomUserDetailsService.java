@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * custom한 UserDetailsService 구현체입니다.
+ *
+ * @author jongsikk
+ * @version 1.0.0
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user;
         try {
-             user = userAdapter.getUser(username);
+            user = userAdapter.getUser(username);
         } catch (FeignException e) {
             throw new UsernameNotFoundException("could not found user!");
         }
