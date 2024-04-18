@@ -4,6 +4,8 @@ import com.nhnacademy.aiot.authentication.dto.AccessTokenResponse;
 import com.nhnacademy.aiot.authentication.exception.InvalidTokenException;
 import com.nhnacademy.aiot.authentication.service.JwtService;
 import com.nhnacademy.aiot.authentication.service.RedisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Reissue Rest Controller")
 @RequestMapping("/api/auth/reissue")
-public class ReissueController {
+public class ReissueRestController {
 
     private final RedisService redisService;
     private final JwtService jwtService;
@@ -33,6 +36,7 @@ public class ReissueController {
      * @return {@link AccessTokenResponse} dto를 반환합니다.
      */
     @GetMapping
+    @Operation(summary = "JWT 재발급 API")
     public AccessTokenResponse reissue(@RequestHeader("X-REFRESH-TOKEN") String refreshToken) {
         String userId = jwtService.extractClaims(refreshToken).get("userId", String.class);
         String authority = jwtService.extractClaims(refreshToken).get("authority", String.class);
