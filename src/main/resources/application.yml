@@ -7,7 +7,7 @@ spring:
   application:
     name: authorization-server
   profiles:
-    active: dev
+    active: prod
 server:
   servlet:
     encoding:
