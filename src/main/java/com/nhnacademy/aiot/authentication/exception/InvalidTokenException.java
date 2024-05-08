@@ -7,4 +7,10 @@ package com.nhnacademy.aiot.authentication.exception;
  * @version 1.0.0
  */
 public class InvalidTokenException extends RuntimeException {
+    public InvalidTokenException() {
+    }
+
+    public InvalidTokenException(String message) {
+        super(message);
+    }
 }

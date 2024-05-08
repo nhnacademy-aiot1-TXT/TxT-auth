@@ -1,5 +1,6 @@
 package com.nhnacademy.aiot.authentication.service;
 
+import com.nhnacademy.aiot.authentication.exception.CryptoOperationException;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class JwtServiceTest {
@@ -77,5 +81,20 @@ class JwtServiceTest {
         String resultPrefix = jwtService.getPrefix();
 
         assertEquals(prefix, resultPrefix);
+    }
+
+    @Test
+    void getTokenException() {
+        String generateUserId = "generate user";
+        String generateAuthority = "ADMIN";
+        JwtService service = mock(JwtService.class);
+
+        given(service.generateAccessToken(anyString(), anyString())).willThrow(new CryptoOperationException("error"));
+
+        try {
+            service.generateAccessToken(generateUserId, generateAuthority);
+        } catch (CryptoOperationException e) {
+            assertEquals(e.getMessage(), "error");
+        }
     }
 }
