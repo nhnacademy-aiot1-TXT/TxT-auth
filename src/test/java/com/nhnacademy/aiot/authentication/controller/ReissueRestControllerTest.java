@@ -64,4 +64,27 @@ class ReissueRestControllerTest {
                 .andExpect(jsonPath("$.token_type", equalTo(prefix)))
                 .andExpect(jsonPath("$.expire_in", equalTo(expireTime)));
     }
+
+    @Test
+    void reissueException() throws Exception {
+        String message = "유효하지 않은 토큰입니다.";
+        String userId = "test user";
+        String authority = "USER";
+        String refreshToken = "test refresh token";
+
+        given(jwtService.extractClaims(anyString()))
+                .willReturn(claims);
+        given(claims.get("userId", String.class))
+                .willReturn(userId);
+        given(claims.get("authority", String.class))
+                .willReturn(authority);
+        given(redisService.isExist(anyString(), anyString()))
+                .willReturn(false);
+
+        mockMvc.perform(get("/api/auth/reissue")
+                        .header("X-REFRESH-TOKEN", refreshToken))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", equalTo(message)));
+    }
 }
