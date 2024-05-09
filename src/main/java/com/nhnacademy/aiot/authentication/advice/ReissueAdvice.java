@@ -2,7 +2,7 @@ package com.nhnacademy.aiot.authentication.advice;
 
 
 import com.nhnacademy.aiot.authentication.controller.ReissueRestController;
-import com.nhnacademy.aiot.authentication.dto.ExceptionDto;
+import com.nhnacademy.aiot.authentication.dto.ApiExceptionDto;
 import com.nhnacademy.aiot.authentication.exception.InvalidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +27,8 @@ public class ReissueAdvice {
      * @return the response entity
      */
     @ExceptionHandler(value = InvalidTokenException.class)
-    public ResponseEntity<ExceptionDto> invalidTokenExceptionHandler(InvalidTokenException exception) {
+    public ResponseEntity<ApiExceptionDto> invalidTokenExceptionHandler(InvalidTokenException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ExceptionDto(LocalDateTime.now(), exception.getMessage()));
+                .body(new ApiExceptionDto(LocalDateTime.now(), exception.getMessage()));
     }
 }
