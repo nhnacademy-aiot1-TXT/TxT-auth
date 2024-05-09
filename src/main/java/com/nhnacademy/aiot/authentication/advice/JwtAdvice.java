@@ -1,6 +1,6 @@
 package com.nhnacademy.aiot.authentication.advice;
 
-import com.nhnacademy.aiot.authentication.dto.ExceptionDto;
+import com.nhnacademy.aiot.authentication.dto.ApiExceptionDto;
 import com.nhnacademy.aiot.authentication.exception.CryptoOperationException;
 import com.nhnacademy.aiot.authentication.service.JwtService;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,8 @@ public class JwtAdvice {
      * @return the response entity
      */
     @ExceptionHandler(value = CryptoOperationException.class)
-    public ResponseEntity<ExceptionDto> cryptoOperationExceptionHandler(CryptoOperationException exception) {
+    public ResponseEntity<ApiExceptionDto> cryptoOperationExceptionHandler(CryptoOperationException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ExceptionDto(LocalDateTime.now(), exception.getMessage()));
+                .body(new ApiExceptionDto(LocalDateTime.now(), exception.getMessage()));
     }
 }
