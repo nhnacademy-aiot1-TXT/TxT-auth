@@ -37,3 +37,12 @@ eureka:
   client:
     register-with-eureka: 'true'
     fetch-registry: 'true'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: beans, conditions, configprops, env, health, httpexchanges, info, loggers, metrics, mappings, threaddump, shutdown
+      base-path: /auth/manage
+  endpoint:
+    health:
+      show-details: always
