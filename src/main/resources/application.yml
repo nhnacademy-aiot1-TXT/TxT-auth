@@ -42,7 +42,7 @@ management:
     web:
       exposure:
         include: beans, conditions, configprops, env, health, httpexchanges, info, loggers, metrics, mappings, threaddump, shutdown
-      base-path: /auth/manage
+      base-path: /auth-server/manage
   endpoint:
     health:
       show-details: always
