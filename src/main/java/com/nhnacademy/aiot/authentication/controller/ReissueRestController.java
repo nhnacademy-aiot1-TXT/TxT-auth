@@ -31,7 +31,8 @@ public class ReissueRestController {
     private final String EXCEPTION_MESSAGE = "유효하지 않은 토큰입니다.";
 
     /**
-     * refresh token을 검증하고, 유효한 토큰이면 access token을 재발급합니다. redis에 존재하지 않는 refresh token이면 InvalidTokenException 예외를 던집니다.
+     * refresh token을 검증하고, 유효한 토큰이면 access token을 재발급합니다.
+     * redis에 존재하지 않는 refresh token이면 InvalidTokenException 예외를 던집니다.
      *
      * @param refreshToken access token 재발급을 위해 필요한 refresh token
      * @return {@link AccessTokenResponse} dto를 반환합니다.
@@ -46,6 +47,10 @@ public class ReissueRestController {
             throw new InvalidTokenException(EXCEPTION_MESSAGE);
         }
 
-        return new AccessTokenResponse(jwtService.generateAccessToken(userId, authority), jwtService.getPrefix(), jwtService.getAccessExpiryTime());
+        return new AccessTokenResponse(
+                jwtService.generateAccessToken(userId, authority),
+                jwtService.getPrefix(),
+                jwtService.getAccessExpiryTime()
+        );
     }
 }

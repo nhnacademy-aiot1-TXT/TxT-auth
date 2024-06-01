@@ -1,6 +1,5 @@
 package com.nhnacademy.aiot.authentication.advice;
 
-
 import com.nhnacademy.aiot.authentication.controller.ReissueRestController;
 import com.nhnacademy.aiot.authentication.dto.ApiExceptionDto;
 import com.nhnacademy.aiot.authentication.exception.InvalidTokenException;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-
 
 /**
  * Reissue 예외처리 클래스

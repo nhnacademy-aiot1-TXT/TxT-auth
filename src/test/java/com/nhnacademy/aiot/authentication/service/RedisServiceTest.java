@@ -22,10 +22,8 @@ import static org.mockito.Mockito.verify;
 class RedisServiceTest {
     @Mock
     private RedisTemplate<String, String> redisTemplate;
-
     @Mock
     private ValueOperations<String, String> valueOperations;
-
     @InjectMocks
     private RedisService redisService;
 
