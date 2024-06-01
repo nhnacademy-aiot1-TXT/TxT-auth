@@ -31,7 +31,7 @@ import java.util.Date;
 public class JwtService {
 
     /**
-     * The constant PREFIX.
+     * TOKEN PREFIX String
      */
     public static final String PREFIX = "Bearer";
 

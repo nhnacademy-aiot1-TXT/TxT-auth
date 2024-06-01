@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(value = "user-management", path = "/api/user/myPage")
 public interface UserAdapter {
     /**
+     * 회원정보를 조회하는 요청
+     *
      * @param id 정보를 조회하고 싶은 회원 아이디
      * @return {@link User}
      */

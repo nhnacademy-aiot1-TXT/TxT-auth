@@ -7,6 +7,11 @@ package com.nhnacademy.aiot.authentication.exception;
  * @version 1.0.0
  */
 public class CryptoOperationException extends RuntimeException {
+    /**
+     * message를 가지는 생성자 메서드
+     *
+     * @param message
+     */
     public CryptoOperationException(String message) {
         super(message);
     }
