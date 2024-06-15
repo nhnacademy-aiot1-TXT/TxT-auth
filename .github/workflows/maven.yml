@@ -50,9 +50,9 @@ jobs:
 
       - name: web docker build and push
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }} .
-          docker push ${{ secrets.DOCKER_REPO }}
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo docker build -t ${{ secrets.DOCKER_REPO }} .
+          sudo docker push ${{ secrets.DOCKER_REPO }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v0.1.6
@@ -62,6 +62,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker rm -f $(docker ps -qa)
-            docker pull ${{ secrets.DOCKER_REPO }}
-            docker run -d -p 8080:8080 --name TxT-auth ${{ secrets.DOCKER_REPO }}
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}
+            sudo docker run -d -p 8080:8080 --name TxT-auth ${{ secrets.DOCKER_REPO }}
